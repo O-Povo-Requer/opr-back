@@ -5,14 +5,14 @@ const jwt = require('jsonwebtoken')
 module.exports = {
 
     /**
-     * Realiza o login do user e retorna o token em caso de sucesso
+     * Realiza o login do cidadao e retorna o token em caso de sucesso
      */
     async login(req, res, next){
         try {
             //Pega os dados da requisição
             const {cpf, senha} = req.body
             //Faz a consulta ao Banco de dados
-            const consulta = await connection('user').where('cpf', cpf)
+            const consulta = await connection('cidadao').where('cpf', cpf)
             //Verirfica se existe registro
             if (consulta.length<1) {
                 return res.status(401).send({ mensagem: 'Falha na autenticação' })
@@ -46,12 +46,12 @@ module.exports = {
     },
 
     /**
-     * Realiza o cadastro de user 
+     * Realiza o cadastro de cidadao 
      */
     async create(req, res, next){
         try {
             //Pega os dados da requisição
-            const {cpf, nome, email, telefone, senha} = req.body
+            const {cpf, nome, email, cidade, senha} = req.body
             //Realiza a criptografia da senha
             //O 10 é um salto, incremente 10 caracteres aleatórios na senha para garantir segurança
             bcrypt.hash(senha, 10, async (errBcrypt, hash) => {
@@ -59,26 +59,26 @@ module.exports = {
                     return res.status(500).send({ error: errBcrypt })
                 }
                 //Faz a consulta ao Banco de dados
-                const consulta = await connection('user').where('cpf', cpf)
+                const consulta = await connection('cidadao').where('cpf', cpf)
                 //Verirfica se existe registro
                 if (consulta.length>0) {
-                    return res.status(409).send({ mensagem: 'User já cadastrado' })
+                    return res.status(409).send({ mensagem: 'Cidadão já cadastrado' })
                 }
-                //Cadastra o comprador pf no banco de dados
-                await connection('user').insert({
+                //Cadastra o cidadão no banco de dados
+                await connection('cidadao').insert({
                     cpf,
                     nome,
                     email,
-                    telefone,
+                    cidade,
                     senha: hash
                 })
                 return res.status(201).send({ 
-                    mensagem: 'User cadastrado!',
-                    userCriado: {
+                    mensagem: 'Cidadao cadastrado!',
+                    cidadaoCriado: {
                         cpf,
                         nome,
                         email,
-                        telefone,
+                        cidade,
                     }
                 })
             })
@@ -89,12 +89,12 @@ module.exports = {
     },
 
     /**
-     * Realiza a atualização de um user 
+     * Realiza a atualização de um cidadao 
      */
     async update(req, res, next){
         try {
             //Pega os dados da requisição
-            const {cpf, nome, email, telefone, senha} = req.body
+            const {cpf, nome, email, cidade, senha} = req.body
             //Realiza a criptografia da senha
             //O 10 é um salto, incremente 10 caracteres aleatórios na senha para garantir segurança
             bcrypt.hash(senha, 10, async (errBcrypt, hash) => {
@@ -102,25 +102,25 @@ module.exports = {
                     return res.status(500).send({ error: errBcrypt })
                 }
                 //Faz a consulta ao Banco de dados
-                const consulta = await connection('user').where('cpf', cpf)
+                const consulta = await connection('cidadao').where('cpf', cpf)
                 //Verirfica se existe registro
                 if (consulta.length<1) {
-                    return res.status(409).send({ mensagem: 'User não cadastrado' })
+                    return res.status(409).send({ mensagem: 'Cidadão não cadastrado' })
                 }
-                //Atualiza os dados do comprador pf
-                await connection('user').where('cpf', cpf).update({
+                //Atualiza os dados do cidadão
+                await connection('cidadao').where('cpf', cpf).update({
                     nome,
                     email,
-                    telefone,
+                    cidade,
                     senha: hash
                 })
                 return res.status(200).send({ 
-                    mensagem: 'User Alterado!',
-                    userAlterado: {
+                    mensagem: 'Cidadão Alterado!',
+                    cidadaoAlterado: {
                         cpf,
                         nome,
                         email,
-                        telefone,
+                        cidade,
                     }
                 })
             })
@@ -130,23 +130,23 @@ module.exports = {
     },
 
     /**
-     * Realiza a exclusão de um comprador 
+     * Realiza a exclusão de um cidadão 
      */
     async delete(req, res, next){
         try {
             //Pega os dados da requisição
             const cpf = req.body.cpf
             //Faz a consulta ao Banco de dados
-            const consulta = await connection('user').where('cpf', cpf)
+            const consulta = await connection('cidadao').where('cpf', cpf)
             //Verirfica se existe registro
             if (consulta.length<1) {
-                return res.status(401).send({ mensagem: 'User não cadastrado' })
+                return res.status(401).send({ mensagem: 'Cidadão não cadastrado' })
             }
-            //Apaga o registro do comprador pf
-            await connection('user').where('cpf', cpf).del()
+            //Apaga o registro do cidadão
+            await connection('cidadao').where('cpf', cpf).del()
             return res.status(200).send({ 
-                mensagem: 'User excluido!',
-                userExcluido: {
+                mensagem: 'Cidadão excluido!',
+                cidadaoExcluido: {
                     cpf
                 }
             })
@@ -156,14 +156,14 @@ module.exports = {
     },
 
     /**
-     * Realiza a recuperação de um comprador 
+     * Realiza a recuperação de um cidadão 
      */
     async get(req, res, next){
         try {
             //Pega os dados da requisição
             const cpf = req.body.cpf
             //Faz a consulta ao Banco de dados
-            const consulta = await connection('user').where('cpf', cpf).select('*')
+            const consulta = await connection('cidadao').where('cpf', cpf).select('*')
             //Verirfica se existe registro
             if (consulta.length>0) {
                 return res.json(consulta)
@@ -171,19 +171,19 @@ module.exports = {
                 throw new Error('404 - Not Found')
             }   
         } catch (error) {
-            return res.status(500).send({ mensagem: 'User não cadastrado!' })
+            return res.status(500).send({ mensagem: 'cidadao não cadastrado!' })
         }
     },
 
     /**
-     * Realiza a listagem dos users 
+     * Realiza a listagem dos cidadaos 
      */
     async list(req, res, next){
         try {
             //Faz a consulta ao Banco de dados
-            const users = await connection('user').select('*')
-            return res.status(201).send({ 
-                users: users
+            const cidadaos = await connection('cidadao').select('*')
+            return res.status(200).send({ 
+                cidadaos: cidadaos
             })
         } catch (error) {
             return res.status(500).send({ error: error })
