@@ -3,6 +3,7 @@ exports.up = function(knex) {
         table.increments();
         table.string('cpf').notNullable();
         table.string('requerimento').notNullable();
+        table.string('tipo_usuario').notNullable();
     })
 };
 

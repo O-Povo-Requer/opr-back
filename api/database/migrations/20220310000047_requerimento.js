@@ -1,6 +1,7 @@
 exports.up = function(knex) {
     return knex.schema.createTable('requerimento', function name(table) {
         table.increments();
+        table.string('cpf_criador').notNullable();
         table.string('titulo').notNullable();
         table.string('localidade').notNullable();
         table.string('descricao').notNullable();
@@ -8,7 +9,7 @@ exports.up = function(knex) {
         table.string('tags');
         table.string('multimidia');
         table.string('legisladores');
-        table.boolean('status');
+        table.string('status');
     })
 };
 
