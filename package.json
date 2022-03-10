@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon api/index.js",
-    "test": "npx mocha",
+    "test": "node util/cidadaoDefault.js && npx mocha",
     "start-jenkins": "npx pm2 start api/index.js",
     "stop-jenkins": "npx pm2 stop api/index.js"
   },
