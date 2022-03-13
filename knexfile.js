@@ -8,12 +8,12 @@ module.exports = {
       //Para uma primeira inicialização é necessário comentar a linha "host: 'db',"
       //E criar um banco de dados chamado dev
       //E rodar o comando npx knex --env development migrate:latest
-      host: 'db',
+      // host: 'db',
       database: 'dev',
       user: 'postgres',
       password: '123456',
       //Para uma primeira inicialização é necessário mudar a porta para 3737
-      port: 5432
+      port: 3737
     },
     pool: {
       min: 2,
@@ -31,12 +31,12 @@ module.exports = {
       //Para uma primeira inicialização é necessário comentar a linha "host: 'db',"
       //E criar um banco de dados chamado hml
       //E rodar o comando npx knex --env staging migrate:latest
-      host: 'db',
+      // host: 'db',
       database: 'hml',
       user: 'postgres',
       password: '123456',
       //Para uma primeira inicialização é necessário mudar a porta para 3737
-      port: 5432
+      port: 3737
     },
     pool: {
       min: 2,
@@ -54,12 +54,12 @@ module.exports = {
       //Para uma primeira inicialização é necessário comentar a linha "host: 'db',"
       //E criar um banco de dados chamado prd
       //E rodar o comando npx knex --env production migrate:latest
-      host: 'db',
+      // host: 'db',
       database: 'prd',
       user:     'postgres',
       password: '123456',
       //Para uma primeira inicialização é necessário mudar a porta para 3737
-      port: 5432
+      port: 3737
     },
     pool: {
       min: 2,
