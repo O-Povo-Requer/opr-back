@@ -7,14 +7,15 @@ module.exports = {
             const response = await service.create_requerimento(body, req.user);
             return res.status(201).send(response);
         }catch (err) {
+            console.log(err)
             return res.status(400).send(err.message);
         }
     },
 
     async update(req, res, next) {
         try {
-            const { body } = req;
-            const response = await service.update_requerimento(body, req.user);
+            const { body, params } = req;
+            const response = await service.update_requerimento(body, req.user, params.id);
             return res.status(204).send(response);
         }catch (err) {
             return res.status(400).send(err.message);

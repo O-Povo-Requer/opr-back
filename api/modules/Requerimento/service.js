@@ -33,12 +33,12 @@ module.exports = {
         return requerimento;
     },
 
-    async update_requerimento(body, user) {
+    async update_requerimento(body, user, id) {
         const { titulo, localidade, descricao, data, tags, legisladores } = body;
 
         const requerimento_existe = await connection('requerimento')
-            .where('cpf_criador', user.cpf)
-            .andWhere('titulo', titulo);
+            .where('id', id)
+            .andWhere('cpf_criador', user.cpf)
 
         if (requerimento_existe.length === 0) {
             throw new Error('Requerimento não existe');
@@ -53,7 +53,9 @@ module.exports = {
             legisladores
         }
 
-        await connection('requerimento').update(requerimento);
+        await connection('requerimento')
+            .where('id', id)
+            .update(requerimento);
 
         return requerimento;
     },
