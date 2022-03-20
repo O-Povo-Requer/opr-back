@@ -1,12 +1,12 @@
 const connection = require('../../database/connections');
-const ErrorWithStatusCode = require('../../error/ErrorWithStatusCode');
+const NotFoundError = require('../../error/NotFoundError');
 
 module.exports = {
     async compartilhar(idDoRequerimento, user) {
         const requerimentoOptional = await connection('requerimento').where('id', idDoRequerimento)
-
+        
         if (requerimentoOptional.length < 1) {
-            throw new ErrorWithStatusCode('Requerimento não existe', 404)
+            throw new NotFoundError('Requerimento não existe')
         }
 
         const requerimento = requerimentoOptional[0]
