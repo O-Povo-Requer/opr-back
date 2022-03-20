@@ -3,17 +3,10 @@ const NotFoundError = require('../../error/NotFoundError');
 
 module.exports = {
     async compartilhar(idDoRequerimento, user) {
-        const requerimentoOptional = await connection('requerimento').where('id', idDoRequerimento)
-        
-        if (requerimentoOptional.length < 1) {
-            throw new NotFoundError('Requerimento não existe')
-        }
+        await validarRequerimentoId(idDoRequerimento)
 
-        const requerimento = requerimentoOptional[0]
-
-        
         const compatilhamento = {
-            requerimento: requerimento.id,
+            requerimento: idDoRequerimento,
             cpf: user.cpf,
             tipo_usuario: "cidadao"
         }
@@ -22,5 +15,13 @@ module.exports = {
     },
     async descompartilhar(idDoRequerimento, user) {
 
+    }
+}
+
+async function validarRequerimentoId(idDoRequerimento) {
+    const requerimentoOptional = await connection('requerimento').where('id', idDoRequerimento)
+
+    if (requerimentoOptional.length < 1) {
+        throw new NotFoundError('Requerimento não existe')
     }
 }
