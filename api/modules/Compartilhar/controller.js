@@ -21,7 +21,7 @@ module.exports = {
         try {
             const {idDoRequerimento} = req.body
             const response = await service.descompartilhar(idDoRequerimento, req.user);
-            return res.status(201).send(response);
+            return res.status(200).send(response);
         } catch (e) {
             if (e instanceof ErrorWithStatusCode) {
                 return res.status(e.statusCode).send({ error: e.message })

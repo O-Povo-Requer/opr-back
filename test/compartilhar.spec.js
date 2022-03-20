@@ -8,6 +8,7 @@ let token = '';
 describe("Testando compartilhamento", async function (){
 
   before(async () => {
+    await makeRequerimento()
     token = await makeToken()
   })
 
@@ -32,7 +33,28 @@ describe("Testando compartilhamento", async function (){
     );
   })
 
-  function makeRequerimento () {
+  it("Deve descompartilhar um requerimento", function (done){
+    var options = { 
+        'method': 'DELETE',
+        'url': 'http://localhost:3333/compartilhar',
+        'headers': {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer '+token,
+        },
+        body: JSON.stringify({
+          "idDoRequerimento": "1"
+        })
+      
+      };
+    request.post(options, function(error, response){
+        expect(response.statusCode).to.equal(200);
+
+        done();
+      }
+    );
+  })
+
+  async function makeRequerimento() {
     // TODO CRIAR UM REQUERIMENTO
   }
 
