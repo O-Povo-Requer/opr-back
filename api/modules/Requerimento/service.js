@@ -74,16 +74,24 @@ module.exports = {
 
     async lista_requerimento(query, limit = 10, page) {
         let offset;
+        let requerimentos;
         if (page > 1) {
             offset = page * limit;
         };
 
-        const requerimentos = await connection('requerimento')
-            .whereLike('titulo', `%${query}%`)
-            .orWhereLike('descricao', `%${query}%`)
-            .orWhereLike('legisladores', `%${query}%`)
-            .offset(offset)
-            .limit(limit);
+        if (query) {
+            requerimentos = await connection('requerimento')
+                .whereLike('titulo', `%${query}%`)
+                .orWhereLike('descricao', `%${query}%`)
+                .orWhereLike('legisladores', `%${query}%`)
+                .offset(offset)
+                .limit(limit);
+        } else {
+            requerimentos = await connection('requerimento')
+                .offset(offset)
+                .limit(limit);
+        }
+
         
         return requerimentos;
     },
