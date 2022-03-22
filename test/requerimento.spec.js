@@ -41,7 +41,7 @@
     );
   });
 
-  it("Deve retorna um requerimento",function(done){
+  it("Deve retornar um requerimento",function(done){
     var options = {
         'method': 'GET',
         'url': 'http://localhost:3333/requerimento/2',
@@ -51,7 +51,7 @@
         },
       
       };
-    request.post(options, function(error, response){
+    request.get(options, function(error, response){
         // utilizando a funcao expect do chai, vamos verificar se o resultado da chamada foi sucesso (200)
         expect(response.statusCode).to.equal(200);
 
@@ -63,7 +63,7 @@
   it("Deve atualizar um requerimento",function(done){
     var options = {
         'method': 'PUT',
-        'url': 'http://localhost:3333/requerimento/2',
+        'url': 'http://localhost:3333/requerimento/edit/2',
         'headers': {
           'Authorization': 'Bearer '+token,
           'Content-Type': 'application/json'
@@ -72,36 +72,37 @@
             "titulo": "Novo requerimento Teste Mock Update",
             "localidade": "Catolé, Campina Grande - PB",
             "descricao": "Ta tudo alagado",
-            "data": "20/01/2022"
+            "data": "20/01/2022",
+            "tags": "Rua",
         })
       
       };
     request.put(options, function(error, response){
         // utilizando a funcao expect do chai, vamos verificar se o resultado da chamada foi sucesso (200)
-        expect(response.statusCode).to.equal(200);
+        expect(response.statusCode).to.equal(204);
 
         done(); // avisamos o test runner que acabamos a validacao e ja pode proseeguir
       }
     );
   });
 
-  it("Deve deletar um requerimento",function(done){
-    var options = {
-        'method': 'DELETE',
-        'url': 'http://localhost:3333/requerimento/1',
-        'headers': {
-          'Authorization': 'Bearer '+token,
-          'Content-Type': 'application/json'
-        },
-    };
-    request.delete(options, function(error, response){
-        // utilizando a funcao expect do chai, vamos verificar se o resultado da chamada foi sucesso (200)
-        expect(response.statusCode).to.equal(200);
+  // it("Deve deletar um requerimento",function(done){
+  //   var options = {
+  //       'method': 'DELETE',
+  //       'url': 'http://localhost:3333/requerimento/6',
+  //       'headers': {
+  //         'Authorization': 'Bearer '+token,
+  //         'Content-Type': 'application/json'
+  //       },
+  //   };
+  //   request.delete(options, function(error, response){
+  //       // utilizando a funcao expect do chai, vamos verificar se o resultado da chamada foi sucesso (200)
+  //       expect(response.statusCode).to.equal(200);
 
-        done(); // avisamos o test runner que acabamos a validacao e ja pode proseeguir
-      }
-    );
-  });
+  //       done(); // avisamos o test runner que acabamos a validacao e ja pode proseeguir
+  //     }
+  //   );
+  // });
 
   it("Deve listar os requerimentos",function(done){
     var options = {
