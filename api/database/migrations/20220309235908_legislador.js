@@ -6,6 +6,8 @@ exports.up = function(knex) {
         table.string('email').notNullable();
         table.string('cidade');
         table.string('senha').notNullable();
+        table.date('data_ultima_atividade').defaultTo(new Date(Date.now()).toISOString()).notNullable();
+        table.integer('n_atividades_semana').defaultTo(0).notNullable();
     })
 };
 
