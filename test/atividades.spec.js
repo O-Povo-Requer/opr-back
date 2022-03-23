@@ -7,7 +7,7 @@
  var expect = chai.expect;
  let token = "";
  
- describe("Testando legisladores",function(){
+ describe("Testando atividades",function(){
 
   before(() => {
     var options = {
@@ -36,12 +36,12 @@
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          "titulo": "teste",
-          "link": "htpp://testedesite.com",
-          "data_ocorrencia": "2022-03-01",
-          "descricao": "teste de descrição 1 ",
-          "legisladores": "legislador1",
-          "status": false
+            "titulo": "teste",
+            "link": "htpp://testedesite1.com",
+            "data_ocorrencia": "2022-03-01",
+            "descricao": "teste de descrição 1 ",
+            "legisladores": "legislador2",
+            "status": false
         })
       
       };
@@ -57,7 +57,7 @@
   it("Deve retornar um legislador",function(done){
     var options = {
         'method': 'POST',
-        'url': 'http://localhost:3333/search/legislador',
+        'url': 'http://localhost:3333/search/atividade',
         'headers': {
           'Authorization': 'Bearer '+ '123',
           'Content-Type': 'application/json'
@@ -144,3 +144,4 @@
   });
 
 });
+

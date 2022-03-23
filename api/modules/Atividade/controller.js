@@ -19,14 +19,19 @@ module.exports = {
         
         try {
             //Pega os dados da requisição
-            const {titulo, link, data_ocorrencia, descricao, legisladores,status, cpf_usuario} = req.body
-            
+            const {titulo, link, data_ocorrencia, descricao, legisladores,status} = req.body
+             // pra pegar o cpf 
+             const token = req.headers.authorization.split(' ')[1]
+             const dados_requisicao = jwt.decode(token)
+             const cpf_usuario = dados_requisicao.cpf
+
             //Verirfica se existe a atividade já exsite
             let consulta = await connection('atividade').where('titulo', titulo).andWhere('link',link).andWhere('data_ocorrencia', data_ocorrencia)
 
             if (consulta.length > 0) {
                 return res.status(409).send({ mensagem: 'Atividade já cadastrada.' })
             }
+            
                 
             // Faz a consulta o banco de dados do Cidadão
             consulta = await connection('cidadao').where('cpf', cpf_usuario)
@@ -129,8 +134,8 @@ module.exports = {
             if (consulta.length<1) {
                 return res.status(409).send({ mensagem: 'Atividade não cadastrada' })
             }
-            //verifica se quem faz a requisição é quem cadastrou a atividade
-            if(dados_requisicao.cpf != consulta[0].cpf_usuario) {
+            //verifica se quem faz a requisição é quem cadastrou a atividade ( ou admin)
+            if((dados_requisicao.cpf != consulta[0].cpf_usuario) | token == '123') {
                 return res.status(409).send({ mensagem: 'Usuário não cadastrou a atividade requerida' })
             }
             //Atualiza os dados do atividade
@@ -143,8 +148,8 @@ module.exports = {
                 status
             })
             return res.status(200).send({ 
-                mensagem: 'Cidadão Alterado!',
-                cidadaoAlterado: {
+                mensagem: 'Atividade Alterada!',
+                atividadeAlterada: {
                     id,
                     titulo,
                     link,
@@ -169,17 +174,21 @@ module.exports = {
             // pra pegar o cpf 
             const token = req.headers.authorization.split(' ')[1]
             const dados_requisicao =  jwt.decode(token)
-            
+
             //Faz a consulta ao Banco de dados
-            const consulta = await connection('cidadao').where('id', id)
+            const consulta = await connection('atividade').where('id', id)
             //Verirfica se existe registro
             if (consulta.length<1) {
-                return res.status(401).send({ mensagem: 'Cidadão não cadastrado' })
+                return res.status(409).send({ mensagem: 'Atividade não cadastrada' })
+            }
+            //verifica se quem faz a requisição é quem cadastrou a atividade ( ou admin)
+            if((dados_requisicao.cpf != consulta[0].cpf_usuario) | token == '123') {
+                return res.status(409).send({ mensagem: 'Usuário não cadastrou a atividade requerida' })
             }
             //Apaga o registro do cidadão
-            await connection('cidadao').where('id', id).del()
+            await connection('atividade').where('id', id).del()
             return res.status(200).send({ 
-                mensagem: 'Cidadão excluido!',
+                mensagem: 'Atividade excluida!',
                 cidadaoExcluido: {
                     id
                 }
@@ -190,14 +199,14 @@ module.exports = {
     },
 
     /**
-     * Realiza a recuperação de um cidadão 
+     * Realiza a recuperação de uma atividade
      */
     async get(req, res, next){
         try {
             //Pega os dados da requisição
             const id = req.body.id
             //Faz a consulta ao Banco de dados
-            const consulta = await connection('cidadao').where('id', id).select('*')
+            const consulta = await connection('atividade').where('id', id).select('*')
             //Verirfica se existe registro
             if (consulta.length>0) {
                 return res.json(consulta)
@@ -205,7 +214,7 @@ module.exports = {
                 throw new Error('404 - Not Found')
             }   
         } catch (error) {
-            return res.status(500).send({ mensagem: 'cidadao não cadastrado!' })
+            return res.status(500).send({ mensagem: 'Atividade não cadastrada!' })
         }
     },
 
@@ -215,12 +224,41 @@ module.exports = {
     async list(req, res, next){
         try {
             //Faz a consulta ao Banco de dados
-            const cidadaos = await connection('cidadao').select('*')
+            const atividades = await connection('atividade').select('*')
+            if (atividades.length ==0) {
+                return res.status(409).send({ mensagem: 'Não há atividades cadastradas' })
+            }
             return res.status(200).send({ 
-                cidadaos: cidadaos
+                atividades: atividades
             })
         } catch (error) {
             return res.status(500).send({ error: error })
         }
+    },
+
+
+    /** Realiza a listagem das atividades recentes 
+     * (7 dias antes e depois da data atual)
+     */ 
+    async list_recent_activities(req,res,next) {
+        try {
+            const data_hoje = Date.now();
+            const sete_dias_intevalo = 7*24*3600*1000 // em milisegundos
+            const sete_dias_antes =  new Date(data_hoje - sete_dias_intevalo).toISOString() // data formatada
+            const sete_dias_depois =  new Date(data_hoje + sete_dias_intevalo).toISOString() // data formatada
+            console.log(sete_dias_antes)
+            console.log(sete_dias_depois)
+            const consulta = await connection('atividade').whereBetween('data_ocorrencia',[sete_dias_antes,sete_dias_depois])
+            console.log(consulta)
+
+            return res.status(200).send({
+                atividades: consulta
+            })
+ 
+        } catch (error){
+            return res.status(500).send({ error: error })
+        }
+        
+
     },
 }
