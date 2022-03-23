@@ -3,10 +3,11 @@ exports.up = function(knex) {
         table.increments();
         table.string('titulo').notNullable();
         table.string('link').notNullable();
-        table.string('data').notNullable();
+        table.string('data_ocorrencia').notNullable();
         table.string('descricao');
         table.string('legisladores');
         table.boolean('status');
+        table.string('cpf_usuario').notNullable();
     })
 };
 
