@@ -21,7 +21,7 @@ describe("Testando compartilhamento", async function (){
           'Authorization': 'Bearer '+token,
         },
         body: JSON.stringify({
-          "idDoRequerimento": "1"
+          "idRequerimento": "1"
         })
       
       };
@@ -42,7 +42,7 @@ describe("Testando compartilhamento", async function (){
           'Authorization': 'Bearer '+token,
         },
         body: JSON.stringify({
-          "idDoRequerimento": "1"
+          "idRequerimento": "1"
         })
       
       };
