@@ -6,7 +6,7 @@ module.exports = {
     async compartilhar(idDoRequerimento, user) {
         await validarRequerimentoId(idDoRequerimento)
 
-        const compartilhamento = getCompartilhamentoByRequerimentoIdAndCpf(idDoRequerimento, user.cpf)
+        const compartilhamento = await getCompartilhamentoByRequerimentoIdAndCpf(idDoRequerimento, user.cpf)
 
         if (compartilhamento == null) {
             const compatilhamento = {
@@ -20,22 +20,42 @@ module.exports = {
             return "Requerimento compartilhado com sucesso!"
         }
 
-        return "Não é possível compartilhar o mesmo requerimento mais de uma."
+        return "Este requerimento já foi compartilhar."
     },
 
     async descompartilhar(idDoRequerimento, user) {
         await validarRequerimentoId(idDoRequerimento)
 
-        const compartilhamento = getCompartilhamentoByRequerimentoIdAndCpf(idDoRequerimento, user.cpf)
+        const compartilhamento = await getCompartilhamentoByRequerimentoIdAndCpf(idDoRequerimento, user.cpf)
 
         if (compartilhamento != null) {
-            await connection('compartilhamento').del().where('id', compartilhamento.id)
+
+            await connection('compartilhamento').del().where('requerimento', idDoRequerimento).andWhere('cpf', user.cpf)
 
             return "Requerimento descompartilhado com sucesso."
         }
-        
+
         return "Não é possível descompartilhar algo que não está sendo compartilhado."
+    },
+
+    async compartilhamentosByUserCpf(userCpf) {
+        const idsRequerimentos = await getIdRequerimentosCompartilhadosByCpf(userCpf)
+    
+        var requerimentos = await getRequerimentosByIds(idsRequerimentos)
+
+        requerimentos.sort(function (a,b) {
+            const [Ayear, Amonth, Aday] = a.data.split("/").map(x => parseInt(x));
+            const [Byear, Bmonth, Bday] = b.data.split("/").map(x => parseInt(x));
+
+            const dataA = new Date(0).setFullYear(Ayear, Amonth, Aday)
+            const dataB = new Date(0).setFullYear(Byear, Bmonth, Bday)
+            
+            return dataB - dataA;
+        })
+
+        return requerimentos
     }
+
 }
 
 async function validarRequerimentoId(idDoRequerimento) {
@@ -46,11 +66,22 @@ async function validarRequerimentoId(idDoRequerimento) {
     }
 }
 
+async function getRequerimentosByIds(ids) {
+    return await connection('requerimento').whereIn('id', ids)
+}
+
 async function getCompartilhamentoByRequerimentoIdAndCpf(idDoRequerimento, cpf) {
     const requerimentoOptional = await connection('compartilhamento').where('cpf', cpf).andWhere('requerimento', idDoRequerimento)
 
     if (requerimentoOptional.length > 0) {
         return requerimentoOptional[0]
     }
+
     return null;
+}
+
+async function getIdRequerimentosCompartilhadosByCpf(cpf) {
+    const resultFromQuery = await connection('compartilhamento').select('requerimento').where('cpf', cpf)
+    const ids = resultFromQuery.map(r => r.requerimento)
+    return ids
 }

@@ -1,9 +1,8 @@
 var request = require("request");
 var chai = require("chai");
-const connection = require('../api/database/connections')
+const connection = require('../api/database/connections');
 var expect = chai.expect;
 let token = '';
-
 
 describe("Testando compartilhamento", async function (){
 
@@ -33,6 +32,28 @@ describe("Testando compartilhamento", async function (){
     );
   })
 
+  it("Deve retornar os requerimentos compartilhados pelo usuário", function (done){
+    var options = { 
+        'method': 'GET',
+        'url': 'http://localhost:3333/compartilhamentos?userCpf=123456',
+        'headers': {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer '+token,
+        }
+      };
+    request.get(options, function(error, response){
+        const requerimentoRetornado = JSON.parse(response.body)[0]
+
+        expect(requerimentoRetornado.id, 1)
+        expect(requerimentoRetornado.cpf_criador, 123456)
+
+        expect(response.statusCode).to.equal(200);
+
+        done();
+      }
+    );
+  })
+
   it("Deve descompartilhar um requerimento", function (done){
     var options = { 
         'method': 'DELETE',
@@ -46,7 +67,7 @@ describe("Testando compartilhamento", async function (){
         })
       
       };
-    request.post(options, function(error, response){
+    request.delete(options, function(error, response){
         expect(response.statusCode).to.equal(200);
 
         done();
@@ -55,7 +76,28 @@ describe("Testando compartilhamento", async function (){
   })
 
   async function makeRequerimento() {
-    // TODO CRIAR UM REQUERIMENTO
+    id = Math.random() * 3;
+    var options = {
+        'method': 'POST',
+        'url': 'http://localhost:3333/requerimento/novo',
+        'headers': {
+          'Authorization': 'Bearer '+ token,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            "titulo": `Novo requerimento Teste Mock#${id}`,
+            "localidade": "Catolé, Campina Grande - PB",
+            "descricao": "Ta tudo alagado",
+            "data": "20/01/2022"
+        })
+      
+      };
+    return new Promise(function(resolve, reject) {
+      request.post(options, function (error, response) {
+        if (error) reject(error);
+        resolve(response.body)
+      });
+    })
   }
 
   function makeToken() {

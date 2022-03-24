@@ -32,7 +32,6 @@
       
       };
     request.post(options, function(error, response){
-      console.log(response);
         // utilizando a funcao expect do chai, vamos verificar se o resultado da chamada foi sucesso (200)
         expect(response.statusCode).to.equal(201);
 
