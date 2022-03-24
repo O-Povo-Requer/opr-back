@@ -58,7 +58,7 @@
         'method': 'POST',
         'url': 'http://localhost:3333/search/cidadao',
         'headers': {
-          'Authorization': 'Bearer '+ '123',
+          'Authorization': 'Bearer '+token,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({

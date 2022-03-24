@@ -23,7 +23,7 @@ routes.delete('/cidadao', login, Controller.delete)
 /**
  * Rotas que só podem ser acessadas pelo administrador do sistema
  */
-routes.post('/search/cidadao', admin, Controller.get)
+routes.post('/search/cidadao', login, Controller.get)
 routes.get('/cidadaos', admin, Controller.list)
 
 module.exports = routes
