@@ -13,14 +13,6 @@ const login = require('../../middleware/legislador_login')
 
 //Rota para cadastro de legislador
 routes.post('/legislador', Controller.create)
-/* 
-    Rota de Login
-    Se autenticado retorna um token disponibilizado por até 1 hora
-*/
-routes.post('/legislador/login', Controller.login)
-
-
-
 
 /**
  * Rotas que só podem ser acessadas estando logado

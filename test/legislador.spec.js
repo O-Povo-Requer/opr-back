@@ -12,7 +12,7 @@
   before(() => {
     var options = {
       'method': 'POST',
-      'url': 'http://localhost:3333/legislador/login',
+      'url': 'http://localhost:3333/login',
       'headers': {
         'Content-Type': 'application/json'
       },
@@ -28,20 +28,20 @@
     });
   });
    
-  it("Deve criar uma atividade",function(done){
+  it("Deve criar um legislador",function(done){
     var options = {
         'method': 'POST',
-        'url': 'http://localhost:3333/atividade',
+        'url': 'http://localhost:3333/legislador',
         'headers': {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          "titulo": "teste",
-          "link": "htpp://testedesite.com",
-          "data_ocorrencia": "2022-03-01",
-          "descricao": "teste de descrição 1 ",
-          "legisladores": "legislador1",
-          "status": false
+          "cpf": "87654321",
+          "nome": "Deilton Lopes",
+          "email": "delo@gmail.com",
+          "cidade": "Campina Grande",
+          "partido": "PZN",
+          "senha": "123"
         })
       
       };
@@ -63,7 +63,7 @@
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          "cpf": "987654321"
+          "cpf": "87654321"
         })
       
       };
@@ -85,7 +85,7 @@
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          "cpf": "987654321",
+          "cpf": "87654321",
           "nome": "Delo Figueiredo",
           "email": "thiago@gmail.com",
           "cidade": "Araripina",
@@ -111,7 +111,7 @@
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          "cpf": "987654321"
+          "cpf": "87654321"
         })
       
     };

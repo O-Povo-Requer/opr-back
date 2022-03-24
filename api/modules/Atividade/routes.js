@@ -18,6 +18,7 @@ routes.post('/search/atividade',login,Controller.get)
 routes.post('/atividades-recentes',login,Controller.list_recent_activities)
 
 
+
 /**
  * Rotas que só podem ser acessadas pelo administrador do sistema
  */
