@@ -38,8 +38,8 @@ module.exports = {
 
     async getAll(req, res, next) {
         try {
-            const { value, offset=10, page=1, orderBy, direction='asc' } = req.query;
-            const response = await service.lista_requerimento(value, offset, page, orderBy, direction);
+            const { titulo, offset=10, page=1, orderBy, direction='asc' } = req.query;
+            const response = await service.lista_requerimento(titulo, offset, page, orderBy, direction);
             return res.status(200).send(response);
         }catch (err) {
             return res.status(400).send(err.message);

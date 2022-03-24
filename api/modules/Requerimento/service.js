@@ -80,8 +80,6 @@ module.exports = {
         requerimentos = connection('requerimento');
         if(query) {
             requerimentos.whereILike('titulo', `%${query}%`)
-            .orWhereILike('descricao', `%${query}%`)
-            .orWhereILike('legisladores', `%${query}%`)
         }
         if (orderBy) {
             requerimentos.orderBy(orderBy, direction)
