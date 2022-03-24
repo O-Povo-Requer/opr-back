@@ -8,7 +8,7 @@ module.exports = {
             const response = await service.create_requerimento(body, req.user);
             return res.status(201).send(response);
         }catch (err) {
-            console.log(err)
+            //console.log(err)
             return res.status(400).send(err.message);
         }
     },
