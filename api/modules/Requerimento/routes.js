@@ -13,4 +13,7 @@ routes.get('/requerimentos', login, Controller.getAll);
 routes.get('/requerimento/:id', login, Controller.get);
 routes.delete('/requerimento/:id', login, Controller.delete);
 
+//Rota de Manifesto em alta
+routes.get('/emalta', controller.emalta)
+
 module.exports = routes;
