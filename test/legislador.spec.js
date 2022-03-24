@@ -12,7 +12,7 @@
   before(() => {
     var options = {
       'method': 'POST',
-      'url': 'http://localhost:3333/legislador/login',
+      'url': 'http://localhost:3333/login',
       'headers': {
         'Content-Type': 'application/json'
       },
@@ -36,7 +36,7 @@
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          "cpf": "987654321",
+          "cpf": "87654321",
           "nome": "Deilton Lopes",
           "email": "delo@gmail.com",
           "cidade": "Campina Grande",
@@ -63,7 +63,7 @@
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          "cpf": "987654321"
+          "cpf": "87654321"
         })
       
       };
@@ -85,7 +85,7 @@
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          "cpf": "987654321",
+          "cpf": "87654321",
           "nome": "Delo Figueiredo",
           "email": "thiago@gmail.com",
           "cidade": "Araripina",
@@ -111,7 +111,7 @@
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          "cpf": "987654321"
+          "cpf": "87654321"
         })
       
     };
