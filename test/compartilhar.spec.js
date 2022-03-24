@@ -44,8 +44,8 @@ describe("Testando compartilhamento", async function (){
     request.get(options, function(error, response){
         const requerimentoRetornado = JSON.parse(response.body)[0]
 
-        expect(requerimentoRetornado.id, 1)
-        expect(requerimentoRetornado.cpf_criador, 123456)
+        expect(requerimentoRetornado.id).to.equal(1)
+        expect(requerimentoRetornado.cpf_criador).to.equal('123456')
 
         expect(response.statusCode).to.equal(200);
 
@@ -68,6 +68,27 @@ describe("Testando compartilhamento", async function (){
       
       };
     request.delete(options, function(error, response){
+        expect(response.statusCode).to.equal(200);
+
+        done();
+      }
+    );
+  })
+
+  it("Deve retornar os requerimentos compartilhados pelo usuário vazio", function (done){
+    var options = { 
+        'method': 'GET',
+        'url': 'http://localhost:3333/compartilhamentos?userCpf=123456',
+        'headers': {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer '+token,
+        }
+      };
+    request.get(options, function(error, response){
+        const requerimentoRetornado = JSON.parse(response.body)
+
+        expect(requerimentoRetornado.length).to.equal(0)
+
         expect(response.statusCode).to.equal(200);
 
         done();
