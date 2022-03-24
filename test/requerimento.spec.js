@@ -32,6 +32,7 @@
       
       };
     request.post(options, function(error, response){
+      //console.log(response);
         // utilizando a funcao expect do chai, vamos verificar se o resultado da chamada foi sucesso (200)
         expect(response.statusCode).to.equal(201);
 
@@ -125,7 +126,7 @@
   function getToken() {
     var options = {
       'method': 'POST',
-      'url': 'http://localhost:3333/cidadao/login',
+      'url': 'http://localhost:3333/login',
       'headers': {
         'Content-Type': 'application/json'
       },

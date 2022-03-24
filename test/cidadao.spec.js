@@ -12,7 +12,7 @@
   before(() => {
     var options = {
       'method': 'POST',
-      'url': 'http://localhost:3333/cidadao/login',
+      'url': 'http://localhost:3333/login',
       'headers': {
         'Content-Type': 'application/json'
       },

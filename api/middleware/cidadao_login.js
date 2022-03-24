@@ -14,8 +14,10 @@ module.exports = async (req, res, next) => {
         //"segredo" é a chave privada única para a descriptografia dp token
         //A chave privada "segredo" deve ser alterada posteriormente para grantir maior segurança
         const decode = jwt.verify(token, 'segredo')
+
         const loggedUser = await connection('cidadao').where('cpf', decode.cpf);
         req.user = loggedUser[0];
+
         next()
     } catch (error) {
         return res.status(401).send({mensagem:'Falha na autenticação'})
