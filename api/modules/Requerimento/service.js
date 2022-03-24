@@ -26,11 +26,10 @@ module.exports = {
             legisladores
         }
 
-        await connection('requerimento').insert(requerimento);
+        const response = (await connection('requerimento')
+            .insert(requerimento, ['id', 'titulo', 'localidade', 'descricao', 'data', 'tags', 'legisladores']))[0];
 
-        delete requerimento.cpf_criador;
-
-        return requerimento;
+        return response;
     },
 
     async update_requerimento(body, user, id) {
@@ -72,28 +71,25 @@ module.exports = {
         return requerimento;
     },
 
-    async lista_requerimento(query, limit = 10, page) {
-        let offset;
-        let requerimentos;
+    async lista_requerimento(query, limit = 10, page, orderBy='', direction) {
+        let offset = 0;
         if (page > 1) {
             offset = page * limit;
         };
 
-        if (query) {
-            requerimentos = await connection('requerimento')
-                .whereLike('titulo', `%${query}%`)
-                .orWhereLike('descricao', `%${query}%`)
-                .orWhereLike('legisladores', `%${query}%`)
-                .offset(offset)
-                .limit(limit);
-        } else {
-            requerimentos = await connection('requerimento')
-                .offset(offset)
-                .limit(limit);
+        requerimentos = connection('requerimento');
+        if(query) {
+            requerimentos.whereILike('titulo', `%${query}%`)
+            .orWhereILike('descricao', `%${query}%`)
+            .orWhereILike('legisladores', `%${query}%`)
+        }
+        if (orderBy) {
+            requerimentos.orderBy(orderBy, direction)
         }
 
+        result = await requerimentos.offset(offset).limit(limit);
         
-        return requerimentos;
+        return result;
     },
 
     async delete_requerimento(id, user) {
