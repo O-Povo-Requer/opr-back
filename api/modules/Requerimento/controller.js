@@ -6,7 +6,10 @@ module.exports = {
         try {
             const { body } = req;
             const response = await service.create_requerimento(body, req.user);
-            return res.status(201).send(response);
+            return res.status(201).send({
+                mensagem: 'Requerimento criado!',
+                requerimentoCriado: response
+            });
         }catch (err) {
             //console.log(err)
             return res.status(400).send(err.message);
@@ -35,8 +38,8 @@ module.exports = {
 
     async getAll(req, res, next) {
         try {
-            const { value } = req.query;
-            const response = await service.lista_requerimento(value);
+            const { value, offset=10, page=1, orderBy, direction='asc' } = req.query;
+            const response = await service.lista_requerimento(value, offset, page, orderBy, direction);
             return res.status(200).send(response);
         }catch (err) {
             return res.status(400).send(err.message);
