@@ -20,7 +20,7 @@ describe("Testando compartilhamento", async function (){
           'Authorization': 'Bearer '+token,
         },
         body: JSON.stringify({
-          "idRequerimento": "1"
+          "idRequerimento": "26"
         })
       
       };
@@ -44,7 +44,7 @@ describe("Testando compartilhamento", async function (){
     request.get(options, function(error, response){
         const requerimentoRetornado = JSON.parse(response.body)[0]
 
-        expect(requerimentoRetornado.id).to.equal(1)
+        expect(requerimentoRetornado.id).to.equal(26)
         expect(requerimentoRetornado.cpf_criador).to.equal('123456')
 
         expect(response.statusCode).to.equal(200);
@@ -63,7 +63,7 @@ describe("Testando compartilhamento", async function (){
           'Authorization': 'Bearer '+token,
         },
         body: JSON.stringify({
-          "idRequerimento": "1"
+          "idRequerimento": "26"
         })
       
       };
