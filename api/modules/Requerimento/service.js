@@ -60,7 +60,10 @@ module.exports = {
     },
 
     async visualiza_requerimento(id) {
-        const requerimento = (await connection('requerimento').where('id', id))[0];
+        const requerimento = (await connection('requerimento').where('id', id)
+            .leftJoin('cidadao', 'requerimento.cpf_criador', 'cidadao.cpf')
+            .select('requerimento.*', 'cidadao.cidade', 'cidadao.nome')
+        )[0];
 
         if (!requerimento) {
             throw new Error('Requerimento não existe');
@@ -77,13 +80,16 @@ module.exports = {
             offset = page * limit;
         };
 
-        requerimentos = connection('requerimento');
+        requerimentos = connection('requerimento')
+            .leftJoin('cidadao', 'requerimento.cpf_criador', 'cidadao.cpf')
+            .select('requerimento.*', 'cidadao.cidade', 'cidadao.nome');
         if(query) {
             requerimentos.whereILike('titulo', `%${query}%`)
         }
         if (orderBy) {
             requerimentos.orderBy(orderBy, direction)
         }
+            
 
         result = await requerimentos.offset(offset).limit(limit);
         
