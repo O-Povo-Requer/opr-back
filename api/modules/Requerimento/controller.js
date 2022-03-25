@@ -98,16 +98,13 @@ module.exports = {
 
     async analysis(req, res, next) {
         try {
-            console.log('estou aqui')
             let consulta = await connection('requerimento').select('*');
-            console.log('estou aqui')
             let req_totais =  consulta.length
-            let em_avaliacao = await connection('requerimento').where('status', 'em avaliação').count();
             let nao_aceitas = await connection('requerimento').where('status', 'não aceita').count();
             let concluidas = await connection('requerimento').where('status', 'concluida').count();
-            let req_em_avaliacao = em_avaliacao[0].count;
             let req_nao_aceitas = nao_aceitas[0].count;
             let req_concluidas = concluidas[0].count;
+            let req_em_avaliacao = req_totais - req_nao_aceitas - req_concluidas;
             
             return res.status(200).send({
                 analise_requisicoes: {
