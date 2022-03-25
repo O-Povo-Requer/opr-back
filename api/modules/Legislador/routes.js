@@ -23,7 +23,7 @@ routes.delete('/legislador', login, Controller.delete)
 /**
  * Rotas que só podem ser acessadas pelo administrador do sistema
  */
-routes.post('/search/legislador', admin, Controller.get)
+routes.post('/search/legislador', login, Controller.get)
 routes.get('/legisladores', admin, Controller.list)
 
 module.exports = routes
