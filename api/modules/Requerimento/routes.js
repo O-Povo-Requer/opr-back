@@ -12,6 +12,7 @@ routes.put('/requerimento/edit/:id', login, Controller.update);
 routes.get('/requerimentos', login, Controller.getAll);
 routes.get('/requerimento/:id', login, Controller.get);
 routes.delete('/requerimento/:id', login, Controller.delete);
+routes.get('/requerimentos/analise',login,Controller.analysis);
 
 //Rota de Manifesto em alta
 routes.get('/emalta', Controller.emalta)

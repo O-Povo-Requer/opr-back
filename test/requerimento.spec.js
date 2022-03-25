@@ -123,6 +123,25 @@
 
   });
 
+  it("Deve mostrar a contagem dos requerimentos",function(done){
+    var options = {
+      'method': 'GET',
+      'url': 'http://localhost:3333/requerimentos/analise',
+      'headers': {
+        'Authorization': 'Bearer '+ token
+      }
+    };
+
+    request.get(options, function(error, response){
+        // utilizando a funcao expect do chai, vamos verificar se o resultado da chamada foi sucesso (200)
+        expect(response.statusCode).to.equal(200);
+
+        done(); // avisamos o test runner que acabamos a validacao e ja pode proseeguir
+      }
+    );
+
+  });
+
   function getToken() {
     var options = {
       'method': 'POST',
