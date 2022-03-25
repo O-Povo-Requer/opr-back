@@ -44,7 +44,7 @@
   it("Deve retornar um requerimento",function(done){
     var options = {
         'method': 'GET',
-        'url': 'http://localhost:3333/requerimento/2',
+        'url': 'http://localhost:3333/requerimento/26',
         'headers': {
           'Authorization': 'Bearer '+ token,
           'Content-Type': 'application/json'
@@ -63,7 +63,7 @@
   it("Deve atualizar um requerimento",function(done){
     var options = {
         'method': 'PUT',
-        'url': 'http://localhost:3333/requerimento/edit/2',
+        'url': 'http://localhost:3333/requerimento/edit/26',
         'headers': {
           'Authorization': 'Bearer '+token,
           'Content-Type': 'application/json'

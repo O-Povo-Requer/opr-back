@@ -6,10 +6,11 @@ const ErrorWithStatusCode = require('../../error/ErrorWithStatusCode')
 module.exports = {
     async curtir(req, res, next){
         try {
-            const {idRequerimento} = req.body
-            const response = await service.curtir(idRequerimento, req.user);
+            const {idRequerimento, cpf} = req.body
+            const response = await service.curtir(idRequerimento, cpf);
             return res.status(200).send(response);
         } catch (e) {
+            concolse.log(e)
             if (e instanceof ErrorWithStatusCode) {
                 return res.status(e.statusCode).send({ error: e.message })
             }
@@ -33,7 +34,8 @@ module.exports = {
 
     async curtidasByUserCpf(req, res, next){
         try {
-            const response = await service.curtidasByUserCpf(req.user);
+            const { cpf } = req.body;
+            const response = await service.curtidasByUserCpf(cpf);
             return res.status(200).send(response);
         } catch (e) {
             if (e instanceof ErrorWithStatusCode) {
