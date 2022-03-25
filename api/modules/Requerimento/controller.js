@@ -95,23 +95,26 @@ module.exports = {
             return res.status(500).send({ error: error })
         }
     },
-
+    //Retorna a análise/contagem dos status dos requerimentos
     async analysis(req, res, next) {
         try {
+            //Faz a busca no banco de dados
             let consulta = await connection('requerimento').select('*');
+            //conta os requerimentos totais
             let req_totais =  consulta.length
-            let nao_aceitas = await connection('requerimento').where('status', 'não aceita').count();
-            let concluidas = await connection('requerimento').where('status', 'concluida').count();
-            let req_nao_aceitas = nao_aceitas[0].count;
-            let req_concluidas = concluidas[0].count;
-            let req_em_avaliacao = req_totais - req_nao_aceitas - req_concluidas;
+            //conta os requisitos nã oaceitos
+            let nao_aceitos = await connection('requerimento').where('status', 'não aceito').count();
+            let concluidos = await connection('requerimento').where('status', 'concluido').count();
+            let req_nao_aceitos = nao_aceitos[0].count;
+            let req_concluidos = concluidos[0].count;
+            let req_em_avaliacao = req_totais - req_nao_aceitos - req_concluidos;
             
             return res.status(200).send({
                 analise_requisicoes: {
                     req_totais,
                     req_em_avaliacao,
-                    req_nao_aceitas,
-                    req_concluidas
+                    req_nao_aceitos,
+                    req_concluidos
                 }
 
             });
