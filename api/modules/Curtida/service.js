@@ -3,16 +3,16 @@ const NotFoundError = require('../../error/NotFoundError');
 
 module.exports = {
 
-    async curtir(idDoRequerimento, user) {
+    async curtir(idDoRequerimento, cpf) {
         await validarRequerimentoId(idDoRequerimento)
 
-        const curtida = await getCurtidaByRequerimentoIdAndCpf(idDoRequerimento, user.cpf)
-        const tipo_usuario = await getTipoUsuarioByCpf(user.cpf)
+        const curtida = await getCurtidaByRequerimentoIdAndCpf(idDoRequerimento, cpf)
+        const tipo_usuario = await getTipoUsuarioByCpf(cpf)
 
         if (curtida == null) {
             const curtida = {
                 requerimento: idDoRequerimento,
-                cpf: user.cpf,
+                cpf: cpf,
                 tipo_usuario: tipo_usuario
             }
     
@@ -39,9 +39,9 @@ module.exports = {
         return { mensagem: "Não é possível descurtir este requerimento, ele não foi curtido anteriormente pelo usuário."}
     },
 
-    async curtidasByUserCpf(user) {
+    async curtidasByUserCpf(cpf) {
 
-        const idsRequerimentos = await getIdRequerimentosCurtidosByCpf(user.cpf)
+        const idsRequerimentos = await getIdRequerimentosCurtidosByCpf(cpf)
 
         var requerimentos = await getRequerimentosByIds(idsRequerimentos)
 
@@ -63,7 +63,7 @@ module.exports = {
     },
 
     async curtidasByRequerimento(idRequerimento) {
-        const resultFromQuery = await connection('curtida').where('requerimento', idRequerimento)
+        const resultFromQuery = await connection('curtida').where('requerimento', idRequerimento).select('*');
 
         if (resultFromQuery.length === 0) {
             return { mensagem: "Este requerimento ainda não recebeu curtidas."}
@@ -82,7 +82,7 @@ module.exports = {
 }
 
 async function validarRequerimentoId(idDoRequerimento) {
-    const requerimentoOptional = await connection('requerimento').where('id', idDoRequerimento)
+    const requerimentoOptional = await connection('requerimento').where('id', idDoRequerimento).select('*')
 
     if (requerimentoOptional.length < 1) {
         throw new NotFoundError('Requerimento não existe')
@@ -90,11 +90,11 @@ async function validarRequerimentoId(idDoRequerimento) {
 }
 
 async function getRequerimentosByIds(ids) {
-    return await connection('requerimento').whereIn('id', ids)
+    return await connection('requerimento').whereIn('id', ids).select('*')
 }
 
 async function getCurtidaByRequerimentoIdAndCpf(idDoRequerimento, cpf) {
-    const curtidaOptional = await connection('curtida').where('cpf', cpf).andWhere('requerimento', idDoRequerimento)
+    const curtidaOptional = await connection('curtida').where('cpf', cpf).andWhere('requerimento', idDoRequerimento).select('*')
 
     if (curtidaOptional.length > 0) {
         return curtidaOptional[0]
@@ -104,7 +104,7 @@ async function getCurtidaByRequerimentoIdAndCpf(idDoRequerimento, cpf) {
 }
 
 async function getTipoUsuarioByCpf(cpf) {
-    const consulta = await connection('cidadao').where('cpf', cpf)
+    const consulta = await connection('cidadao').where('cpf', cpf).select('*');
     if (consulta.length > 0) {
         return "cidadao"
     }

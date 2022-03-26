@@ -20,7 +20,8 @@ describe("Testando curtida", async function (){
                 'Authorization': 'Bearer '+token,
             },
             body: JSON.stringify({
-                "idRequerimento": "1"
+                "idRequerimento": "26",
+                "cpf": "132456"
             })
 
         };
@@ -34,71 +35,57 @@ describe("Testando curtida", async function (){
 
     it("Deve retornar a quantidade de curtidas de um requerimento", function (done){
         var options = {
-            'method': 'GET',
+            'method': 'POST',
             'url': 'http://localhost:3333/curtidas_por_requerimento',
             'headers': {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer '+token,
+              'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcGYiOiI2NTQzMjEiLCJ0aXBvX2RlX3VzdWFyaW8iOiJsZWdpc2xhZG9yIiwiaWF0IjoxNjQ4MjQ1MjAxLCJleHAiOjE2NDgyNDg4MDF9.2WYwsGrSSOQAS-4bdp49f7_TeB0diyiOYsRjrekDXJM',
+              'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
-                "idRequerimento": "1"
-            })
-        };
-        request.get(options, function(error, response){
-                const totalCurtidas = JSON.parse(response.body)['total_curtidas']
-
-                expect(totalCurtidas).to.equals(1)
-
-                expect(response.statusCode).to.equal(200);
+            body: JSON.stringify({"idRequerimento":27})
+          
+          };
+          request(options, function (error, response) {
+            expect(response.statusCode).to.equal(200);
 
                 done();
-            }
-        );
+          });
     })
 
     it("Deve retornar os requerimentos curtidos pelo usuário", function (done){
         var options = {
-            'method': 'GET',
+            'method': 'POST',
             'url': 'http://localhost:3333/curtidas_por_usuario',
             'headers': {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer '+token,
-            }
+              'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcGYiOiI2NTQzMjEiLCJ0aXBvX2RlX3VzdWFyaW8iOiJsZWdpc2xhZG9yIiwiaWF0IjoxNjQ4MjQ1MjAxLCJleHAiOjE2NDgyNDg4MDF9.2WYwsGrSSOQAS-4bdp49f7_TeB0diyiOYsRjrekDXJM',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({"cpf":"123456"})
+          
         };
-        request.get(options, function(error, response){
-                const requerimentosRetornados = JSON.parse(response.body)['requerimentos_curtidos']
+          
+        request(options, function (error, response) {
+            expect(response.statusCode).to.equal(200);
 
-                expect(requerimentosRetornados.length).to.equals(1)
-
-                expect(response.statusCode).to.equal(200);
-
-                done();
-            }
-        );
+            done();
+        });
     })
 
     it("Deve retornar se o requerimento foi curtido pelo usuário", function (done){
         var options = {
-            'method': 'GET',
-            'url': 'http://localhost:3333/verifica_curtida',
+            'method': 'POST',
+            'url': 'http://localhost:3333/curtidas_por_requerimento',
             'headers': {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer '+token,
+              'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcGYiOiI2NTQzMjEiLCJ0aXBvX2RlX3VzdWFyaW8iOiJsZWdpc2xhZG9yIiwiaWF0IjoxNjQ4MjQ1MjAxLCJleHAiOjE2NDgyNDg4MDF9.2WYwsGrSSOQAS-4bdp49f7_TeB0diyiOYsRjrekDXJM',
+              'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
-                "idRequerimento": "1"
-            })
-        };
-        request.get(options, function(error, response){
-                const requerimentoCurtido = JSON.parse(response.body)['requerimento_curtido']
-
-                expect(requerimentoCurtido).to.equals(true)
-
-                expect(response.statusCode).to.equal(200);
+            body: JSON.stringify({"idRequerimento":27})
+          
+          };
+          request(options, function (error, response) {
+            expect(response.statusCode).to.equal(200);
 
                 done();
-            }
-        );
+          });
     })
 
     it("Deve descurtir um requerimento previamente curtido pelo usuário", function (done){
@@ -110,7 +97,7 @@ describe("Testando curtida", async function (){
                 'Authorization': 'Bearer '+token,
             },
             body: JSON.stringify({
-                "idRequerimento": "1"
+                "idRequerimento": "26"
             })
 
         };

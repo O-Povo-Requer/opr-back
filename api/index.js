@@ -5,6 +5,8 @@ const routesLegislador = require('./modules/Legislador/routes')
 const routesCompartilhamento = require('./modules/Compartilhar/routes')
 const routeLogin = require('./modules/ProcessarLogin/routes')
 const routesComentario = require('./modules/Comentario/routes')
+const routeCurtida = require('./modules/Curtida/routes')
+
 const cors = require('cors')
 const { use } = require('chai')
 
@@ -18,5 +20,6 @@ app.use(routesLegislador)
 app.use(routesCompartilhamento)
 app.use(routesComentario)
 app.use(routeLogin)
+app.use(routeCurtida)
 
 app.listen(3333)
