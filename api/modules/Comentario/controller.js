@@ -149,7 +149,18 @@ module.exports = {
             const consulta = await connection('comentario').where('id', id).select('*')
             //Verirfica se existe registro
             if (consulta.length>0) {
-                return res.json(consulta)
+                const comentario = consulta[0]
+                const autor = await connection('cidadao').where('cpf', comentario.cpf_usuario).select('*').first()
+                const final = {
+                    nome: autor.nome,
+                    cidade: autor.cidade,
+                    cpf_autor: autor.cpf,
+                    id: comentario.id,
+                    requerimento: comentario.requerimento,
+                    comentario: comentario.comentario,
+                    tipo_de_usuario: comentario.tipo_de_usuario
+                }
+                return res.json(final)
             }else{
                 throw new Error('404 - Not Found')
             }   
