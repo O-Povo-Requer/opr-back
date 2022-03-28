@@ -33,7 +33,7 @@ module.exports = {
     },
 
     async update_requerimento(body, user, id) {
-        const { titulo, localidade, descricao, data, tags, legisladores } = body;
+        const { titulo, localidade, descricao, data, tags, legisladores, status } = body;
 
         const requerimento_existe = await connection('requerimento')
             .where('id', id)
@@ -49,7 +49,8 @@ module.exports = {
             descricao,
             data,
             tags,
-            legisladores
+            legisladores,
+            status
         }
 
         await connection('requerimento')
