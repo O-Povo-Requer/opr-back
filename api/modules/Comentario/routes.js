@@ -24,6 +24,7 @@ routes.post('/comentario',login, Controller.create)
 routes.put('/comentario', login, Controller.update)
 routes.delete('/comentario', login, Controller.delete)
 routes.post('/search/comentario', login, Controller.get)
+routes.post('/requerimento/comentarios', login, Controller.getByRequerimento)
 
 /**
  * Rotas que só podem ser acessadas pelo administrador do sistema

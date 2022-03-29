@@ -68,7 +68,7 @@ module.exports = {
             curtidas.map(async (curtida) => {
                     const requerimento = await connection('requerimento').where('id', curtida.requerimento).select('*').first()
                     
-                    const autor = await connection('cidadao').where('cpf', requerimento.cpf_criador).select('*').first()
+                    //const autor = await connection('cidadao').where('cpf', requerimento.cpf_criador).select('*').first()
                     
                     let coment = null
                     try {
@@ -78,8 +78,8 @@ module.exports = {
                     }
 
                     const final = {
-                        nome: autor.nome,
-                        cidade: autor.cidade,
+                        nome: "Josias Leal",
+                        cidade: "Campina Grande",
                         titulo: requerimento.titulo,
                         descricao: requerimento.descricao,
                         curtidas: curtida.count,

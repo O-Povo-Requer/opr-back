@@ -186,7 +186,16 @@ module.exports = {
         }
     },
 
-
-   
-
+    async getByRequerimento(req, res, next){
+        try {
+            //Faz a consulta ao Banco de dados
+            const {requerimento} = req.body;
+            const comentarios = await connection('comentario').where('requerimento', requerimento).select('*');
+            return res.status(200).send({ 
+                comentarios: comentarios
+            })
+        } catch (error) {
+            return res.status(500).send({ error: error })
+        }
+    },
 }
