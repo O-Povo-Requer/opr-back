@@ -162,10 +162,12 @@ module.exports = {
                 }
                 return res.json(final)
             }else{
-                throw new Error('404 - Not Found')
+                return res.json({
+                    comentarios: []
+                })
             }   
         } catch (error) {
-            return res.status(500).send({ mensagem: 'Atividade não cadastrada!' })
+            return res.status(500).send({ mensagem: 'Ops! Algo deu errado.' })
         }
     },
 
