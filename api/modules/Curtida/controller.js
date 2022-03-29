@@ -10,7 +10,7 @@ module.exports = {
             const response = await service.curtir(idRequerimento, cpf);
             return res.status(200).send(response);
         } catch (e) {
-            concolse.log(e)
+            //concolse.log(e)
             if (e instanceof ErrorWithStatusCode) {
                 return res.status(e.statusCode).send({ error: e.message })
             }
